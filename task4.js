@@ -1,30 +1,52 @@
-// document.getElementsByTagName('li')[4].style.color = "red"
-// // using query selector
+var button = document.querySelector('#submit')
+var input = document.querySelector('#item')
+var items = document.querySelector('#items')
+var filter = document.querySelector('#filter')
+filter.addEventListener('keyup',filterevent)
+button.addEventListener('click', btnclick)
+items.addEventListener('click',itemsclick)
+// var del = document.querySelector('.delete')
+// del.addEventListener('click',delclick)
 
-// document.querySelector('.list-group-item:nthchild(2)').style.background = 'green'
-// document.querySelector('.list-group-item:nthchild(3)').style.display = 'none'
-// var odditems = document.querySelectorAll('li:nth-child(odd)')
-// for(var i=0;i<odditems.length;i++){
-//     odditems[i].style.background = 'green'
-// }
-var elements = document.querySelector('#items')
-console.log(document.querySelector('#items').parentElement)
-console.log(document.querySelector('#items').lastElementChild)
-console.log(document.querySelector('#items').lastChild)
-console.log(document.querySelector('#items').firstElementChild)
-console.log(document.querySelector('#items').firstChild)
-console.log(document.querySelector('.title').nextSibling)
-console.log(document.querySelector('.title').nextElementSibling)
-console.log(document.querySelectorAll('.list-group-item')[2].previousElementSibling)
-console.log(document.querySelectorAll('.list-group-item')[2].previousSibling)
-var newitem = document.createElement('div')
-newitem.setAttribute('title','new')
-var txt = document.createTextNode("new item")
-newitem.appendChild(txt)
-elements.appendChild(newitem)
-// hello word before item lister
-var head = document.querySelector('#main-header')
-var hellotext = document.createTextNode("Hello")
-var hellotext2 = document.createTextNode("Hello")
-head.prepend(hellotext)
-elements.prepend(hellotext2)
+function btnclick(e){
+    // items.innerHTML = ''+items.innerHTML+'<li class="list-group-item">'+input.value +'<button class="btn btn-danger btn-sm float-right delete">X</button></li>'
+    var newtxt = document.createTextNode(input.value)
+    var newele = document.createElement('li')
+    newele.setAttribute('class','list-group-item')
+    newele.appendChild(newtxt)
+
+    var newbtn = document.createElement('button')
+    newbtn.setAttribute('class','btn btn-danger btn-sm float-right delete')
+    newbtn.textContent='X'
+    newele.appendChild(newbtn)
+    items.appendChild(newele)
+    var newedit = document.createElement('button')
+    newedit.setAttribute('class','btn btn-warning btn-sm float-right edit mx-2')
+    newedit.textContent = 'edit'
+    newele.appendChild(newedit)
+    items.appendChild(newele)
+    
+}
+
+function itemsclick(e){
+    if(e.target.classList.contains('delete')){
+        if(confirm('Are you sure?')){
+            var i = e.target.parentElement
+            items.removeChild(i)
+        }
+    }   
+}
+function filterevent(e){
+    var text = filter.value.toLowerCase()
+    var allitems = items.getElementsByTagName('li')
+    Array.from(allitems).forEach(function(item){
+        var itemName = item.firstChild.textContent.toLowerCase()
+        // console.log(item.firstChild)
+        if(itemName.indexOf(text)!=-1){
+            item.style.display='block'
+        }
+        else{
+            item.style.display='none'
+        }
+    });
+}
